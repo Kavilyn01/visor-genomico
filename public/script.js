@@ -13,24 +13,32 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = '';
 
-            if (data.error) {
+            if (data.length === 0) {
                 resultsContainer.textContent = 'No se encontraron resultados para el gen ingresado.';
                 return;
             }
 
-            // Mostrar datos relevantes del gen
-            const geneElement = document.createElement('div');
-            geneElement.classList.add('gene-info');
-            geneElement.innerHTML = `
-                <strong>Nombre del Gen:</strong> ${data.display_name}<br>
-                <strong>ID del Gen:</strong> ${data.id}<br>
-                <strong>Ubicación:</strong> ${data.location}<br>
-                <strong>Descripción:</strong> ${data.description || 'No disponible'}
-            `;
-            resultsContainer.appendChild(geneElement);
+            data.forEach(gene => {
+                const geneElement = document.createElement('div');
+                geneElement.classList.add('gene-info');
+                geneElement.innerHTML = `
+                    <strong>Nombre del Gen:</strong> ${gene.display_id}<br>
+                    <strong>Tipo:</strong> ${gene.db_display_name}<br>
+                    <strong>Descripción:</strong> ${gene.description || 'No disponible'}<br>
+                    <hr>
+                `;
+                resultsContainer.appendChild(geneElement);
+            });
+
+            // Agregar el mensaje personalizado después de los resultados
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('personal-message');
+            messageElement.textContent = "pero mira que te lo pasas bien Alejandrito";
+            resultsContainer.appendChild(messageElement);
         })
         .catch(error => {
             alert('Error al cargar los datos genómicos');
             console.error(error);
         });
 });
+
